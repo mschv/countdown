@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Countdown Widget</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap');
+
+    body {
+      margin: 0;
+      font-family: 'Playfair Display', serif;
+      background: #ffffff;
+      color: #37352F;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      text-align: center;
+      flex-direction: column;
+      padding: 20px;
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    .title {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      font-weight: 600;
+    }
+
+    .countdown {
+      font-size: 2rem;
+      font-weight: bold;
+      color: #9B2C2C; /* Notion red */
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.85; }
+    }
+
+    .footer {
+      margin-top: 1rem;
+      font-size: 1rem;
+      color: #787774;
+      opacity: 0.8;
+    }
+  </style>
+</head>
+<body>
+  <div class="title" id="title"></div>
+  <div class="countdown" id="countdown">Loading...</div>
+  <div class="footer">Notion-style countdown widget</div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const dateStr = params.get('date');
+    const titleStr = params.get('title');
+
+    // Set title
+    const titleEl = document.getElementById('title');
+    titleEl.textContent = titleStr ? decodeURIComponent(titleStr) : 'Countdown';
+
+    function getCountdown(targetDate) {
+      const countdownEl = document.getElementById('countdown');
+
+      function updateCountdown() {
+        const now = new Date().getTime();
+        const distance = targetDate - now;
+
+        if (distance < 0) {
+          countdownEl.textContent = "0d 0h 0m 0s to go";
+          return;
+        }
+
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        countdownEl.textContent = `${days}d ${hours}h ${minutes}m ${seconds}s to go`;
+      }
+
+      updateCountdown();
+      setInterval(updateCountdown, 1000);
+    }
+
+    if (dateStr) {
+      const targetDate = new Date(dateStr).getTime();
+      if (!isNaN(targetDate)) {
+        getCountdown(targetDate);
+      } else {
+        document.getElementById('countdown').textContent = 'Invalid date format!';
+      }
+    } else {
+      document.getElementById('countdown').textContent = 'No date set!';
+    }
+  </script>
+</body>
+</html>
