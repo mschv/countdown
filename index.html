@@ -20,15 +20,15 @@
       flex-direction: column;
       padding: 20px;
       box-sizing: border-box;
-      overflow: hidden; /* Prevent scrollbar */
+      overflow: hidden; /* Remove scrollbar */
     }
 
     .card {
       background: #ffffff;
       border-radius: 12px;
-      padding: 20px;
-      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-      max-width: 400px;
+      padding: 32px; /* Increased padding for a more spacious feel */
+      box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+      max-width: 420px;
       width: 100%;
       box-sizing: border-box;
     }
@@ -55,20 +55,22 @@
     .form {
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 16px; /* More space between form elements */
       align-items: center;
     }
 
     input[type="text"],
     input[type="datetime-local"],
     button {
-      padding: 8px 12px;
+      padding: 12px 16px; /* Increased padding */
       font-size: 1rem;
       font-family: 'Playfair Display', serif;
       border: 1px solid #E1E1E1;
-      border-radius: 8px;
+      border-radius: 10px;
       outline: none;
-      width: 250px;
+      width: 100%;
+      max-width: 280px;
+      box-sizing: border-box;
     }
 
     button {
@@ -93,17 +95,17 @@
 <body>
 
   <div class="card" id="form">
-    <input type="text" id="titleInput" placeholder="Countdown title" />
-    <input type="datetime-local" id="dateInput" />
-    <button onclick="startCountdown()">Start Countdown</button>
+    <div class="form">
+      <input type="text" id="titleInput" placeholder="Countdown title" />
+      <input type="datetime-local" id="dateInput" />
+      <button onclick="startCountdown()">Start Countdown</button>
+    </div>
   </div>
 
   <div class="card" id="countdownCard" style="display: none;">
     <div class="title" id="title"></div>
     <div class="countdown" id="countdown"></div>
   </div>
-
-  <div class="footer">Notion-style countdown widget</div>
 
   <script>
     function startCountdown() {
@@ -131,6 +133,7 @@
           countdownEl.textContent = "0m 0d 0h 0min 0s to go";
           return;
         }
+
         const months = Math.floor(distance / (1000 * 60 * 60 * 24 * 30.44));
         const days = Math.floor((distance % (1000 * 60 * 60 * 24 * 30.44)) / (1000 * 60 * 60 * 24));
         const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
