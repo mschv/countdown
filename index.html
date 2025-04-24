@@ -19,7 +19,18 @@
       text-align: center;
       flex-direction: column;
       padding: 20px;
-      animation: fadeIn 1s ease-in-out;
+      box-sizing: border-box;
+      overflow: hidden; /* Prevent scrollbar */
+    }
+
+    .card {
+      background: #ffffff;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+      max-width: 400px;
+      width: 100%;
+      box-sizing: border-box;
     }
 
     .title {
@@ -34,11 +45,6 @@
       color: #9B2C2C; /* Notion red */
       animation: pulse 2s infinite;
       margin-top: 1rem;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
     }
 
     @keyframes pulse {
@@ -86,15 +92,18 @@
 </head>
 <body>
 
-  <div class="form" id="form">
+  <div class="card" id="form">
     <input type="text" id="titleInput" placeholder="Countdown title" />
     <input type="datetime-local" id="dateInput" />
     <button onclick="startCountdown()">Start Countdown</button>
   </div>
 
-  <div class="title" id="title" style="display: none;"></div>
-  <div class="countdown" id="countdown" style="display: none;"></div>
+  <div class="card" id="countdownCard" style="display: none;">
+    <div class="title" id="title"></div>
+    <div class="countdown" id="countdown"></div>
+  </div>
 
+  <div class="footer">Notion-style countdown widget</div>
 
   <script>
     function startCountdown() {
@@ -107,8 +116,7 @@
       }
 
       document.getElementById("form").style.display = "none";
-      document.getElementById("title").style.display = "block";
-      document.getElementById("countdown").style.display = "block";
+      document.getElementById("countdownCard").style.display = "block";
 
       document.getElementById("title").textContent = title || "Countdown";
 
@@ -129,12 +137,13 @@
         const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
         const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-        countdownEl.textContent = `${months}m ${days}d ${hours}h ${minutes}m ${seconds}s to go`;
+        countdownEl.textContent = `${months}m ${days}d ${hours}h ${minutes}min ${seconds}s to go`;
       }
 
       updateCountdown();
       setInterval(updateCountdown, 1000);
     }
   </script>
+
 </body>
 </html>
