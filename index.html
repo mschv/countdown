@@ -33,6 +33,7 @@
       font-weight: bold;
       color: #9B2C2C; /* Notion red */
       animation: pulse 2s infinite;
+      margin-top: 1rem;
     }
 
     @keyframes fadeIn {
@@ -45,30 +46,75 @@
       50% { opacity: 0.85; }
     }
 
-    .footer {
-      margin-top: 1rem;
+    .form {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      align-items: center;
+    }
+
+    input[type="text"],
+    input[type="datetime-local"],
+    button {
+      padding: 8px 12px;
       font-size: 1rem;
+      font-family: 'Playfair Display', serif;
+      border: 1px solid #E1E1E1;
+      border-radius: 8px;
+      outline: none;
+      width: 250px;
+    }
+
+    button {
+      background-color: #9B2C2C;
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #7C1F1F;
+    }
+
+    .footer {
+      margin-top: 1.5rem;
+      font-size: 0.9rem;
       color: #787774;
       opacity: 0.8;
     }
   </style>
 </head>
 <body>
-  <div class="title" id="title"></div>
-  <div class="countdown" id="countdown">Loading...</div>
+
+  <div class="form" id="form">
+    <input type="text" id="titleInput" placeholder="Countdown title" />
+    <input type="datetime-local" id="dateInput" />
+    <button onclick="startCountdown()">Start Countdown</button>
+  </div>
+
+  <div class="title" id="title" style="display: none;"></div>
+  <div class="countdown" id="countdown" style="display: none;"></div>
+
   <div class="footer">Notion-style countdown widget</div>
 
   <script>
-    const params = new URLSearchParams(window.location.search);
-    const dateStr = params.get('date');
-    const titleStr = params.get('title');
+    function startCountdown() {
+      const title = document.getElementById("titleInput").value;
+      const date = document.getElementById("dateInput").value;
 
-    // Set title
-    const titleEl = document.getElementById('title');
-    titleEl.textContent = titleStr ? decodeURIComponent(titleStr) : 'Countdown';
+      if (!date) {
+        alert("Please enter a valid date and time.");
+        return;
+      }
 
-    function getCountdown(targetDate) {
-      const countdownEl = document.getElementById('countdown');
+      document.getElementById("form").style.display = "none";
+      document.getElementById("title").style.display = "block";
+      document.getElementById("countdown").style.display = "block";
+
+      document.getElementById("title").textContent = title || "Countdown";
+
+      const targetDate = new Date(date).getTime();
+      const countdownEl = document.getElementById("countdown");
 
       function updateCountdown() {
         const now = new Date().getTime();
@@ -89,17 +135,6 @@
 
       updateCountdown();
       setInterval(updateCountdown, 1000);
-    }
-
-    if (dateStr) {
-      const targetDate = new Date(dateStr).getTime();
-      if (!isNaN(targetDate)) {
-        getCountdown(targetDate);
-      } else {
-        document.getElementById('countdown').textContent = 'Invalid date format!';
-      }
-    } else {
-      document.getElementById('countdown').textContent = 'No date set!';
     }
   </script>
 </body>
