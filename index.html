@@ -95,7 +95,6 @@
   <div class="title" id="title" style="display: none;"></div>
   <div class="countdown" id="countdown" style="display: none;"></div>
 
-  <div class="footer">Notion-style countdown widget</div>
 
   <script>
     function startCountdown() {
@@ -121,16 +120,16 @@
         const distance = targetDate - now;
 
         if (distance < 0) {
-          countdownEl.textContent = "0d 0h 0m 0s to go";
+          countdownEl.textContent = "0m 0d 0h 0min 0s to go";
           return;
         }
-
-        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const months = Math.floor(distance / (1000 * 60 * 60 * 24 * 30.44));
+        const days = Math.floor((distance % (1000 * 60 * 60 * 24 * 30.44)) / (1000 * 60 * 60 * 24));
         const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
         const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
         const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-        countdownEl.textContent = `${days}d ${hours}h ${minutes}m ${seconds}s to go`;
+        countdownEl.textContent = `${months}m ${days}d ${hours}h ${minutes}m ${seconds}s to go`;
       }
 
       updateCountdown();
